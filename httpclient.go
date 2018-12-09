@@ -14,8 +14,8 @@ import (
 
 type Result struct {
 	Index int
-	Res *http.Response
-	Err error
+	Res   *http.Response
+	Err   error
 }
 
 type Response struct {
@@ -92,7 +92,6 @@ func (c moyskladClient) GetAll(url string) []interface{} {
 	meta := DecodeMeta(firstResponse.Body)
 	urls := makeUrlList(url, meta.Size)
 
-
 	if len(urls) > 0 {
 		results := c.boundedParallelGet(urls, 5)
 		for _, result := range results {
@@ -133,16 +132,24 @@ var client = &http.Client{Timeout: 60 * time.Second}
 
 func (c moyskladClient) MakeRequest(url string, method string) (res *http.Response, err error) {
 	req, error1 := http.NewRequest(method, url, nil)
-	if error1 != nil {log.Fatal(err)}
+	if error1 != nil {
+		log.Fatal(err)
+	}
 
 	req.SetBasicAuth(c.login, c.password)
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("Content-Type", "application/json")
 
 	res, err = client.Do(req)
-	if err != nil {log.Fatal(err)}
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	return res, err
+}
+
+func parseMeta() {
+
 }
 
 func DecodeMeta(responseBody []byte) *codec.Meta {
@@ -169,4 +176,9 @@ func makeUrlList(baseUrl string, size int) (urls []string) {
 	}
 	return
 
+}
+
+func makeEntityUrl(entityName string) (url string) {
+	url = codec.API_BASE + "entity/" + entityName + "/"
+	return
 }

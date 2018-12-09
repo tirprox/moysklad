@@ -55,3 +55,7 @@ type Uom struct {
 type Stock struct {
 	Stock map[string]string `json:"stock"`
 }
+
+type Entity struct {
+	Type string
+}
