@@ -30,6 +30,7 @@ type GenericApiResponse struct {
 func (c moyskladClient) boundedParallelGet(urls []string, concurrencyLimit int) []Result {
 
 	semaphoreChan := make(chan struct{}, concurrencyLimit)
+
 	resultsChan := make(chan *Result)
 
 	defer func() {
@@ -37,7 +38,7 @@ func (c moyskladClient) boundedParallelGet(urls []string, concurrencyLimit int) 
 		close(resultsChan)
 	}()
 
-	for i, url := range urls {
+	for i, generatedUrl := range urls {
 
 		go func(i int, url string) {
 
@@ -47,7 +48,7 @@ func (c moyskladClient) boundedParallelGet(urls []string, concurrencyLimit int) 
 			resultsChan <- result
 			<-semaphoreChan
 
-		}(i, url)
+		}(i, generatedUrl)
 	}
 
 	var results []Result
@@ -75,6 +76,7 @@ func (c moyskladClient) GetAll(url string) []interface{} {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	defer res.Body.Close()
 
 	firstResponse := Response{}
@@ -136,9 +138,7 @@ func (c moyskladClient) MakeRequest(url string, method string) (res *http.Respon
 		log.Fatal(err)
 	}
 
-	req.SetBasicAuth(c.login, c.password)
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("Content-Type", "application/json")
+	c.setHeaders(req)
 
 	res, err = client.Do(req)
 	if err != nil {
@@ -148,8 +148,10 @@ func (c moyskladClient) MakeRequest(url string, method string) (res *http.Respon
 	return res, err
 }
 
-func parseMeta() {
-
+func (c moyskladClient) setHeaders(req *http.Request) {
+	req.SetBasicAuth(c.login, c.password)
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Content-Type", "application/json")
 }
 
 func DecodeMeta(responseBody []byte) *codec.Meta {
