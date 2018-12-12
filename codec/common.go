@@ -5,57 +5,57 @@ type Meta struct {
 	MetadataHref string `json:"metadataHref,omitempty"`
 	Type         string `json:"type,omitempty"`
 	MediaType    string `json:"mediaType,omitempty"`
-	Size         int    `json:"size,omitempty" bson:"size,omitempty"`
-	Limit        int    `json:"limit,omitempty" bson:"limit,omitempty"`
-	Offset       int    `json:"offset,omitempty" bson:"offset,omitempty"`
-	NextHref     string `json:"nextHref,omitempty" bson:"nextHref,omitempty"`
-	UUIDHref     string `json:"uuidHref,omitempty" bson:"uuidHref,omitempty"`
+	Size         int    `json:"size,omitempty"`
+	Limit        int    `json:"limit,omitempty"`
+	Offset       int    `json:"offset,omitempty"`
+	NextHref     string `json:"nextHref,omitempty"`
+	UUIDHref     string `json:"uuidHref,omitempty"`
 }
 
 type Context struct {
 	Employee struct {
-		Meta Meta `json:"meta"`
-	} `json:"employee"`
+		Meta *Meta `json:"meta,omitempty"`
+	} `json:"employee,omitempty"`
 }
 
 type Group struct {
-	Meta `json:"meta"`
+	Meta *Meta `json:"meta,omitempty"`
 }
 
 type Owner struct {
-	Meta Meta `json:"meta"`
+	Meta *Meta `json:"meta,omitempty"`
 }
 
 type SalePrices []struct {
-	Value    float64 `json:"value"`
-	Currency struct {
-		Meta Meta `json:"meta"`
-	} `json:"currency"`
-	PriceType string `json:"priceType"`
+	Value     float64   `json:"value,omitempty"`
+	Currency  *Currency `json:"currency,omitempty"`
+	PriceType string    `json:"priceType,omitempty"`
+}
+
+type Currency struct {
+	Meta *Meta `json:"meta,omitempty"`
+}
+
+type Rate struct {
+	Currency *Currency `json:"currency,omitempty"`
 }
 
 type BuyPrice struct {
-	Value    float64 `json:"value"`
-	Currency struct {
-		Meta Meta `json:"meta"`
-	} `json:"currency"`
+	Value    float64   `json:"value,omitempty"`
+	Currency *Currency `json:"currency,omitempty"`
 }
 
 type Characteristics []struct {
-	Meta  Meta   `json:"meta"`
-	ID    string `json:"id"`
-	Name  string `json:"name"`
-	Value string `json:"value"`
+	Meta  *Meta  `json:"meta,omitempty"`
+	ID    string `json:"id,omitempty"`
+	Name  string `json:"name,omitempty"`
+	Value string `json:"value,omitempty"`
 }
 
 type Uom struct {
-	Meta Meta `json:"meta"`
+	Meta *Meta `json:"meta,omitempty"`
 }
 
 type Stock struct {
-	Stock map[string]string `json:"stock"`
-}
-
-type Entity struct {
-	Type string
+	Stock map[string]string `json:"stock,omitempty"`
 }

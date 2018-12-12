@@ -1,8 +1,7 @@
 package codec
 
-type Counterparty struct {
-	Meta           *Meta           `json:"meta,omitempty"`
-	SyncID         string          `json:"syncId,omitempty"`
+type Agent struct {
+	Meta           Meta            `json:"meta,omitempty"`
 	ID             string          `json:"id,omitempty"`
 	AccountID      string          `json:"accountId,omitempty"`
 	Owner          *Owner          `json:"owner,omitempty"`
@@ -22,4 +21,28 @@ type Counterparty struct {
 	Notes          *Notes          `json:"notes,omitempty"`
 	State          *State          `json:"state,omitempty"`
 	SalesAmount    int             `json:"salesAmount,omitempty"`
+}
+
+type Accounts struct {
+	Meta *Meta `json:"meta,omitempty"`
+}
+
+type Contactpersons struct {
+	Meta *Meta `json:"meta,omitempty"`
+}
+
+type Notes struct {
+	Meta *Meta `json:"meta,omitempty"`
+}
+
+type State struct {
+	Meta *Meta `json:"meta,omitempty"`
+}
+
+type Organization struct {
+	Meta *Meta `json:"meta,omitempty"`
+}
+
+type OrganizationAccount struct {
+	Meta *Meta `json:"meta,omitempty"`
 }

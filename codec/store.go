@@ -1,17 +1,17 @@
 package codec
 
 type Store struct {
-	Meta         Meta   `json:"meta"`
-	ID           string `json:"id"`
-	AccountID    string `json:"accountId"`
-	Owner        Owner  `json:"owner"`
-	Shared       bool   `json:"shared"`
-	Group        Group  `json:"group"`
-	Version      int    `json:"version"`
-	Updated      string `json:"updated"`
-	Name         string `json:"name"`
-	ExternalCode string `json:"externalCode"`
-	Archived     bool   `json:"archived"`
-	PathName     string `json:"pathName"`
-	Address      string `json:"address"`
+	Meta         *Meta  `json:"meta,omitempty"`
+	ID           string `json:"id,omitempty"`
+	AccountID    string `json:"accountId,omitempty"`
+	Owner        *Owner `json:"owner,omitempty"`
+	Shared       bool   `json:"shared,omitempty"`
+	Group        *Group `json:"group,omitempty"`
+	Version      int    `json:"version,omitempty"`
+	Updated      string `json:"updated,omitempty"`
+	Name         string `json:"name,omitempty"`
+	ExternalCode string `json:"externalCode,omitempty"`
+	Archived     bool   `json:"archived,omitempty"`
+	PathName     string `json:"pathName,omitempty"`
+	Address      string `json:"address,omitempty"`
 }
