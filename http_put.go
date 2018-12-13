@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"sort"
 )
 
 func (c moyskladClient) PutRequest(url string, data interface{}) (result map[string]interface{}) {
@@ -25,7 +26,7 @@ func (c moyskladClient) PutRequest(url string, data interface{}) (result map[str
 
 	c.setHeaders(request)
 
-	fmt.Println("Requesting: POST ", url)
+	fmt.Println("Requesting: PUT ", url)
 
 	response, err := httpClient.Do(request)
 	if err != nil {
@@ -54,4 +55,47 @@ func (c moyskladClient) Put(entity string, id string, data interface{}) map[stri
 	result := c.PutRequest(url, data)
 
 	return result
+}
+
+func (c moyskladClient) concurrentPut(urls []string, concurrencyLimit int) []ResponseHolder {
+
+	semaphoreChannel := make(chan struct{}, concurrencyLimit)
+	responseChannel := make(chan *ResponseHolder)
+
+	defer func() {
+		close(semaphoreChannel)
+		close(responseChannel)
+	}()
+
+	for i, genUrl := range urls {
+
+		go func(i int, url string) {
+
+			semaphoreChannel <- struct{}{}
+
+			response := c.GetRequest(url)
+			responseHolder := &ResponseHolder{i, response}
+			responseChannel <- responseHolder
+
+			<-semaphoreChannel
+
+		}(i, genUrl)
+	}
+
+	var results []ResponseHolder
+
+	for {
+		result := <-responseChannel
+		results = append(results, *result)
+
+		if len(results) == len(urls) {
+			break
+		}
+	}
+
+	sort.Slice(results, func(i, j int) bool {
+		return results[i].Index < results[j].Index
+	})
+
+	return results
 }
